@@ -13,7 +13,6 @@ class MyUser {
 
 class AuthFireBase {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  User? user = FirebaseAuth.instance.currentUser;
 
   MyUser _userFromFirebase(User? user) {
     return MyUser(uid: user?.uid);
@@ -60,15 +59,14 @@ class AuthFireBase {
     }
   }
 
-  Future getUserDetails() async {
-    try {
-      DocumentSnapshot ds = await _firestore.collection("users").doc(user?.uid).get();
-      String firstName = ds.get('firstName');
-      String lastName = ds.get('lastName');
-      return [firstName ,lastName];
-    } catch (e) {
-      print(e);
-      return null;
-    }
+  Future<MyUser> getUserDetails(String uid) async {
+
+    DocumentSnapshot ds = await _firestore.collection("users").doc(uid).get();
+    MyUser myUser = MyUser(uid: uid);
+    myUser.firstName = ds.get('firstName');
+    myUser.lastName = ds.get('lastName');
+    myUser.email = ds.get('email');
+    return myUser;
+
   }
 }

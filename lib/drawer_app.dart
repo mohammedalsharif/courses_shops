@@ -18,8 +18,34 @@ class DrawerApp extends StatefulWidget {
 }
 
 class _DrawerAppState extends State<DrawerApp> {
+  String fullName = "";
+
+  void getDetails(String uid) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .where("uid", isEqualTo: uid)
+        .limit(1)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              print(element['firstName'] + " " + element['lastName']);
+              setState(() {
+                fullName = element['firstName'] + " " + element['lastName'];
+              });
+            }));
+    print("dllllllllllllllllllllllllllllllllll");
+  }
+
   AuthFireBase authFireBase = AuthFireBase();
+  String? uid = FirebaseAuth.instance.currentUser?.uid;
   final storage = new FlutterSecureStorage();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    String? x = FirebaseAuth.instance.currentUser?.uid;
+    getDetails(x!);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +68,7 @@ class _DrawerAppState extends State<DrawerApp> {
                     ),
                     Center(
                       child: Text(
-                       "Rechelle D. Michael",
+                        fullName,
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
