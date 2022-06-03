@@ -18,8 +18,6 @@ class DrawerApp extends StatefulWidget {
 }
 
 class _DrawerAppState extends State<DrawerApp> {
-  String fullName = "";
-
   void getDetails(String uid) async {
     await FirebaseFirestore.instance
         .collection('users')
@@ -27,28 +25,27 @@ class _DrawerAppState extends State<DrawerApp> {
         .limit(1)
         .get()
         .then((value) => value.docs.forEach((element) {
-              print(element['firstName'] + " " + element['lastName']);
               setState(() {
                 fullName = element['firstName'] + " " + element['lastName'];
+                _email = element['email'];
               });
             }));
-    print("dllllllllllllllllllllllllllllllllll");
   }
-
+  String fullName = "";
+  String _email = "";
   AuthFireBase authFireBase = AuthFireBase();
   String? uid = FirebaseAuth.instance.currentUser?.uid;
   final storage = new FlutterSecureStorage();
 
   @override
   void initState() {
-    // TODO: implement initState
-    String? x = FirebaseAuth.instance.currentUser?.uid;
-    getDetails(x!);
+    getDetails(uid!);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Drawer(
       backgroundColor: Colors.white,
       child: Padding(
@@ -70,9 +67,22 @@ class _DrawerAppState extends State<DrawerApp> {
                       child: Text(
                         fullName,
                         style: TextStyle(
-                          color: Colors.black,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'PlayfairDisplay',
+                            fontSize: 18),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: Text(
+                        _email,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.indigo,
                           fontWeight: FontWeight.bold,
-                          fontFamily: 'PlayfairDisplay',
                         ),
                       ),
                     ),

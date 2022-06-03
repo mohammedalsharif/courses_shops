@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/drawer_app.dart';
+import 'package:untitled/model/Courses.dart';
 import 'package:untitled/screens/course_details_screen.dart';
+
+import '../main.dart';
 
 class CoursesScreen extends StatefulWidget {
   const CoursesScreen({Key? key}) : super(key: key);
@@ -11,8 +15,21 @@ class CoursesScreen extends StatefulWidget {
 
 class _CoursesScreenState extends State<CoursesScreen>
     with SingleTickerProviderStateMixin {
+  TextStyle textStyle = TextStyle(
+    color: colorText,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'PlayfairDisplay',
+  );
+  TextStyle blackTextStyle = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'PlayfairDisplay',
+  );
+
   TabController? _controller;
   int index = 0;
+  List<Courses> coursesList = [];
 
   @override
   void initState() {
@@ -22,11 +39,6 @@ class _CoursesScreenState extends State<CoursesScreen>
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = const TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      fontFamily: 'PlayfairDisplay',
-    );
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -34,9 +46,8 @@ class _CoursesScreenState extends State<CoursesScreen>
         appBar: AppBar(
           title: Text(
             'Course',
-            style: textStyle,
+            style: blackTextStyle,
           ),
-
         ),
         body: Padding(
           padding: const EdgeInsetsDirectional.only(
@@ -75,14 +86,14 @@ class _CoursesScreenState extends State<CoursesScreen>
                         'ALL COURSES',
                         style: TextStyle(
                           fontFamily: 'PlayfairDisplay',
-                          color: index == 0 ? Colors.orange : Colors.black87,
+                          color: index == 0 ? colorText : Colors.black87,
                         ),
                       ),
                       Text(
                         'MY COURSES',
                         style: TextStyle(
                           fontFamily: 'PlayfairDisplay',
-                          color: index == 1 ? Colors.orange : Colors.black87,
+                          color: index == 1 ? colorText : Colors.black87,
                         ),
                       ),
                     ],
@@ -96,14 +107,45 @@ class _CoursesScreenState extends State<CoursesScreen>
                     controller: _controller,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      ListView.builder(
-                        itemCount: 3,
-                        itemBuilder: (context, index) => allCoursesItem(),
+                      StreamBuilder(
+                        stream: readCourses(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Courses>> snapshot) {
+                          if (snapshot.hasData) {
+                            List<Courses>? courses = snapshot.data;
+                            return ListView.builder(
+                              itemCount: courses!.length,
+                              itemBuilder: (BuildContext context, int index) =>
+                                  allCoursesItem(index, courses),
+                            );
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.amber,
+                              ),
+                            );
+                          }
+                        },
                       ),
-                      ListView.builder(
-                        itemCount: 3,
-                        itemBuilder: (context, index) => myCourseItem(),
-                      ),
+                      StreamBuilder(
+                        stream: readCourses(),
+                        builder: (BuildContext context, AsyncSnapshot<List<Courses>> snapshot) {
+                          if (snapshot.hasData) {
+                            List<Courses>? courses = snapshot.data;
+                            return ListView.builder(
+                              itemCount: courses!.length,
+                              itemBuilder: (BuildContext context, int index) =>
+                                  myCourseItem(index, courses),
+                            );
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.amber,
+                              ),
+                            );
+                          }
+                        },
+                      )
                     ],
                   ),
                 ),
@@ -111,12 +153,16 @@ class _CoursesScreenState extends State<CoursesScreen>
             ],
           ),
         ),
-
       ),
     );
   }
 
-  Widget allCoursesItem() => InkWell(
+  Stream<List<Courses>> readCourses() => FirebaseFirestore.instance
+      .collection("courses")
+      .snapshots()
+      .map((event) => event.docs.map((e) => Courses.fromJson(e.data())).toList());
+
+  Widget allCoursesItem(int index, List<Courses> courses) => InkWell(
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -138,8 +184,8 @@ class _CoursesScreenState extends State<CoursesScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Blology&The Sientifie Method',
-                      style: Theme.of(context).textTheme.bodyText1,
+                      courses[index].name!,
+                      style: blackTextStyle,
                     ),
                     const SizedBox(
                       height: 5.0,
@@ -147,27 +193,24 @@ class _CoursesScreenState extends State<CoursesScreen>
                     Row(
                       children: [
                         Text(
-                          'By',
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                        const SizedBox(
-                          width: 5.0,
+                          'By ',
+                          style: TextStyle(
+                            fontFamily: 'PlayfairDisplay',
+                            color: Colors.grey
+                          ),
                         ),
                         Text(
-                          '30 Jon 2020',
-                          style: Theme.of(context).textTheme.bodyText2,
-                        )
+                          courses[index].teacher!,
+                          style: blackTextStyle,
+                        ),
                       ],
                     ),
                     const SizedBox(
                       height: 5.0,
                     ),
                     Text(
-                      '16 lesons',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2!
-                          .copyWith(color: Colors.orange),
+                      courses[index].lessons! + ' Lessons',
+                      style: textStyle,
                     )
                   ],
                 )
@@ -180,12 +223,14 @@ class _CoursesScreenState extends State<CoursesScreen>
         ),
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => const CourseDetailsScreen(),
+            builder: (context) => CourseDetailsScreen(
+              courses: courses[index],
+            ),
           ),
         ),
       );
 
-  Widget myCourseItem() => InkWell(
+  Widget myCourseItem(int index, List<Courses> courses) => InkWell(
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -207,33 +252,22 @@ class _CoursesScreenState extends State<CoursesScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Blology&The Sientifie Method',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    const SizedBox(
-                      height: 5.0,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Start on',
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                        const SizedBox(
-                          width: 5.0,
-                        ),
-                        Text(
-                          '30 Jon 2020',
-                          style: Theme.of(context).textTheme.bodyText2,
-                        )
-                      ],
+                      courses[index].name!,
+                      style: blackTextStyle,
                     ),
                     const SizedBox(
                       height: 5.0,
                     ),
                     Text(
-                      '03 of 4 Leveasons',
-                      style: Theme.of(context).textTheme.bodyText2,
+                      courses[index].teacher!,
+                      style: blackTextStyle,
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    Text(
+                      courses[index].lessons! + 'Lessons',
+                      style: textStyle,
                     )
                   ],
                 )
@@ -247,7 +281,9 @@ class _CoursesScreenState extends State<CoursesScreen>
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => const CourseDetailsScreen(),
+              builder: (context) => CourseDetailsScreen(
+                courses: courses[index],
+              ),
             ),
           );
         },

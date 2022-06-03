@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:untitled/drawer_app.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:untitled/main.dart';
+import 'package:untitled/services/auth.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +34,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-      drawer: const DrawerApp(),
+      drawer: DrawerApp(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,3 +204,4 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
