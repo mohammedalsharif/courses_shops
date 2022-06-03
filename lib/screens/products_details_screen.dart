@@ -1,17 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/drawer_app.dart';
 
+import '../main.dart';
+import '../model/Products.dart';
+
 class ProductsDetailsScreen extends StatelessWidget {
-  const ProductsDetailsScreen({Key? key}) : super(key: key);
+  final Products products;
+  const ProductsDetailsScreen({Key? key, required this.products}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    TextStyle textStyle = TextStyle(
+      color: colorText,
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'PlayfairDisplay',
+    );
+    TextStyle blackTextStyle = TextStyle(
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'PlayfairDisplay',
+    );
     return Scaffold(
          drawer: const DrawerApp(),
       appBar: AppBar(
 
-        title: const Text(
-          'Products',
+        title: Text(
+          'Products Detail',
+          style: blackTextStyle,
         ),
         actions: const [Icon(Icons.add_shopping_cart)],
       ),
@@ -21,12 +38,15 @@ class ProductsDetailsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
+              height: 20,
+            ),
+            SizedBox(
               height: 220,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: 4,
                 physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, index) => listItem(),
+                itemBuilder: (context, index) => listItem(products.imageURL!),
               ),
             ),
             Padding(
@@ -35,75 +55,78 @@ class ProductsDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'The Earth Coffe Mug',
-                    style: Theme.of(context).textTheme.headline5,
+                    products.name!,
+                    style: blackTextStyle.copyWith( fontSize: 24),
                   ),
                   const SizedBox(
                     height: 10.0,
                   ),
-                  const Text(
-                    '18 KWD',
-                    style: TextStyle(color: Colors.orange),
+                   Text(
+                     products.price!,
+                    style: textStyle.copyWith(fontSize: 20),
                   ),
                   const SizedBox(
                     height: 10.0,
                   ),
-                  Container(
-                    width: 80,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black12,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.add,
-                          color: Colors.grey,
-                        ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
-                        Text('3'),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Icon(
-                          Icons.add,
-                          color: Colors.grey,
-                        ),
-                      ],
-                    ),
-                  ),
+                 Card(
+                   elevation: 5,
+                   shape: RoundedRectangleBorder(
+                     borderRadius: BorderRadius.circular(50)
+                   ),
+                   child:  Container(
+                     width: 80,
+                   
+                     child: Row(
+                       children:  [
+                         Icon(
+                           Icons.remove,
+                           color: Colors.grey,
+                         ),
+                         SizedBox(
+                           width: 10.0,
+                         ),
+                         Text('3'
+                         ,style: blackTextStyle,
+                         ),
+                         SizedBox(
+                           width: 10.0,
+                         ),
+                         Icon(
+                           Icons.add,
+                           color: Colors.grey,
+                         ),
+                       ],
+                     ),
+                   ),
+                 ),
                   const SizedBox(
                     height: 10.0,
-                  ),
-                  const Text(
-                    'The Earth Coffe Mug',
                   ),
                   Text(
+                    'About product',
+                    style: blackTextStyle.copyWith( fontSize: 20),
+                  ),
+                  SizedBox(height: 10,),
+                  Text(
                     'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here content here\', making it look like readable English',
-                    style: Theme.of(context)
-                        .textTheme
-                        .caption!
-                        .copyWith(fontSize: 16),
+                    style: blackTextStyle.copyWith(color: Colors.grey),
                   ),
                   const SizedBox(
-                    height: 10.0,
+                    height:50,
                   ),
                   SizedBox(
                     width: double.infinity,
-                    height: 50.0,
+                    height: 60.0,
                     child: MaterialButton(
-                      color: Colors.red[200],
+
+                      color: colorPrimary,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(50),
                       ),
                       onPressed: () {},
                       child: Text(
                         'add to cart'.toUpperCase(),
+                        style: blackTextStyle.copyWith( fontSize: 18),
                       ),
                     ),
                   ),
@@ -116,19 +139,26 @@ class ProductsDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget listItem() => Padding(
+  Widget listItem(String imageURL) => Padding(
         padding: const EdgeInsets.symmetric(
           vertical: 10,
           horizontal: 5,
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Image.network(
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png',
+          child: Image.network( imageURL,
+            loadingBuilder: (context, child, loadingProgress) {
+              if(loadingProgress!=null){
+                return CircularProgressIndicator(color: colorPrimary,);
+              }else{
+                return child;
+              }
+            },
             height: 220,
             width: 300,
             fit: BoxFit.fill,
           ),
         ),
       );
+
 }

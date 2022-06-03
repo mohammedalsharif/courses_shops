@@ -11,7 +11,6 @@ class CourseDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     TextStyle textStyle = TextStyle(
       color: colorText,
       fontSize: 16,
@@ -26,119 +25,120 @@ class CourseDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'CourseDetails',
+          'Course Details',
           style: blackTextStyle,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsetsDirectional.only(
-          top: 15.0,
-          start: 10.0,
-          end: 10.0,
-        ),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                courses.name!,
-                style: blackTextStyle,
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Text('By ', style: blackTextStyle),
-                        Text(
-                          courses.teacher!,
-                          style: blackTextStyle.copyWith(color: Colors.grey)
-                        ),
-                      ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsetsDirectional.only(
+            top: 15.0,
+            start: 15.0,
+            end: 10.0,
+          ),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  courses.name!,
+                  style: blackTextStyle.copyWith(fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Text('By ', style: blackTextStyle),
+                          Text(courses.teacher!,
+                              style:
+                                  blackTextStyle.copyWith(color: Colors.grey)),
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Row(
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Text(
+                            '36 Reviews',
+                            style: blackTextStyle,
+                          ),
+                          Text(
+                            '(View All)',
+                            style: textStyle,
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Row(
+                  children: [
+                    Row(
                       children: [
                         Text(
-                          'Reviews',
+                          'Start on',
                           style: blackTextStyle,
                         ),
                         Text(
-                          '(View All)',
-                          style: textStyle,
+                          ' 05 Feb 2020 |  ',
+                          style: blackTextStyle.copyWith(color: Colors.grey),
+                        ),
+                        Text(
+                          courses.lessons! + ' Lessions',
+                          style: blackTextStyle,
                         )
                       ],
                     ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              Row(
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        'Start on',
-                        style: blackTextStyle,
-                      ),
-                      Text(
-                        ' 05 Feb 2020 |  ',
-                        style: blackTextStyle.copyWith(color: Colors.grey),
-                      ),
-                      Text(
-                        courses.lessons! + ' Lessions',
-                        style: blackTextStyle,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              Text(
-                '75.00 KWD',
-                style: textStyle.copyWith(fontSize: 35),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              Text(
-                'About this Course',
-                style: blackTextStyle.copyWith(fontSize: 20),
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here content here\', making it look like readable English',
-                style:
-                    blackTextStyle.copyWith(color: Colors.grey, fontSize: 16),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              Text(
-                'Course',
-                style: blackTextStyle.copyWith(fontSize: 20),
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              ListView.builder(
-                itemCount: 3,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) => courseDetailsItem(context),
-              ),
-            ],
+                  ],
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                Text(
+                  '75.00 KWD',
+                  style: textStyle.copyWith(fontSize: 35),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                Text(
+                  'About this Course',
+                  style: blackTextStyle.copyWith(fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Text(
+                  'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here content here\', making it look like readable English',
+                  style:
+                      blackTextStyle.copyWith(color: Colors.grey, fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                Text(
+                  'Course',
+                  style: blackTextStyle.copyWith(fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                ListView.builder(
+                  itemCount: 3,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) => courseDetailsItem(context),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -146,6 +146,7 @@ class CourseDetailsScreen extends StatelessWidget {
   }
 
   Widget courseDetailsItem(BuildContext context) => Card(
+        elevation: 5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -154,24 +155,35 @@ class CourseDetailsScreen extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                'Lesson 1',
-                style: Theme.of(context)
-                    .textTheme
-                    .subtitle1!
-                    .copyWith(color: Colors.orange),
+                'Lesson on',
+                style: TextStyle(
+                  color: colorText,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'PlayfairDisplay',
+                ),
               ),
               const SizedBox(
                 width: 20.0,
               ),
               Text(
                 'Introduction',
-                style: Theme.of(context).textTheme.subtitle1,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'PlayfairDisplay'),
               ),
               const Spacer(),
-              Icon(
-                Icons.play_circle_filled_outlined,
-                color: Colors.orange[200],
-                size: 30.0,
+              Card(
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50)),
+                child: Icon(
+                  Icons.play_circle_filled_outlined,
+                  color: colorPrimary,
+                  size: 40.0,
+                ),
               ),
             ],
           ),

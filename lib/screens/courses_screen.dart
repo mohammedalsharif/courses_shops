@@ -135,7 +135,7 @@ class _CoursesScreenState extends State<CoursesScreen>
                             return ListView.builder(
                               itemCount: courses!.length,
                               itemBuilder: (BuildContext context, int index) =>
-                                  myCourseItem(index, courses),
+                                  allCoursesItem(index, courses),
                             );
                           } else {
                             return Center(
@@ -164,15 +164,22 @@ class _CoursesScreenState extends State<CoursesScreen>
 
   Widget allCoursesItem(int index, List<Courses> courses) => InkWell(
         child: Card(
+          elevation: 5,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Row(
               children: [
                 ClipRRect(
-                  child: Image.network(
-                    'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png',
-                    height: 80.0,
-                    width: 80.0,
+                  child: Image.network( courses[index].imageURL!,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if(loadingProgress!=null){
+                        return CircularProgressIndicator(color: colorPrimary,);
+                      }else{
+                        return child;
+                      }
+                    },
+                    height: 100,
+                    width: 100,
                     fit: BoxFit.fill,
                   ),
                   borderRadius: BorderRadius.circular(10.0),
@@ -230,62 +237,63 @@ class _CoursesScreenState extends State<CoursesScreen>
         ),
       );
 
-  Widget myCourseItem(int index, List<Courses> courses) => InkWell(
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              children: [
-                ClipRRect(
-                  child: Image.network(
-                    'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png',
-                    height: 80.0,
-                    width: 80.0,
-                    fit: BoxFit.fill,
-                  ),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                const SizedBox(
-                  width: 10.0,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      courses[index].name!,
-                      style: blackTextStyle,
-                    ),
-                    const SizedBox(
-                      height: 5.0,
-                    ),
-                    Text(
-                      courses[index].teacher!,
-                      style: blackTextStyle,
-                    ),
-                    const SizedBox(
-                      height: 5.0,
-                    ),
-                    Text(
-                      courses[index].lessons! + 'Lessons',
-                      style: textStyle,
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => CourseDetailsScreen(
-                courses: courses[index],
-              ),
-            ),
-          );
-        },
-      );
+  // Widget myCourseItem(int index, List<Courses> courses) => InkWell(
+  //   child: Card(
+  //     elevation: 5,
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(10.0),
+  //       child: Row(
+  //         children: [
+  //           ClipRRect(
+  //             child: Image.network(
+  //               courses[index].imageURL!,
+  //               height: 80.0,
+  //               width: 80.0,
+  //               fit: BoxFit.fill,
+  //             ),
+  //             borderRadius: BorderRadius.circular(10.0),
+  //           ),
+  //           const SizedBox(
+  //             width: 10.0,
+  //           ),
+  //           Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Text(
+  //                 courses[index].name!,
+  //                 style: blackTextStyle,
+  //               ),
+  //               const SizedBox(
+  //                 height: 5.0,
+  //               ),
+  //               Text(
+  //                 courses[index].teacher!,
+  //                 style: blackTextStyle,
+  //               ),
+  //               const SizedBox(
+  //                 height: 5.0,
+  //               ),
+  //               Text(
+  //                 courses[index].lessons! + ' Lessons',
+  //                 style: textStyle,
+  //               )
+  //             ],
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //     shape: RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.circular(10),
+  //     ),
+  //   ),
+  //   onTap: () {
+  //     Navigator.of(context).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => CourseDetailsScreen(
+  //           courses: courses[index],
+  //         ),
+  //       ),
+  //     );
+  //   },
+  // );
 }
