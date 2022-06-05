@@ -10,6 +10,17 @@ void main() async {
 
 Color colorPrimary = const Color(0xFFECB7BF);
 Color colorText = const Color(0xFFC99200);
+TextStyle textStyle = TextStyle(
+  color: colorText,
+  fontSize: 16,
+  fontWeight: FontWeight.bold,
+  fontFamily: 'PlayfairDisplay',
+);
+TextStyle blackTextStyle = TextStyle(
+  color: Colors.black,
+  fontWeight: FontWeight.bold,
+  fontFamily: 'PlayfairDisplay',
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

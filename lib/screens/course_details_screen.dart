@@ -11,17 +11,7 @@ class CourseDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = TextStyle(
-      color: colorText,
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
-      fontFamily: 'PlayfairDisplay',
-    );
-    TextStyle blackTextStyle = TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      fontFamily: 'PlayfairDisplay',
-    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(

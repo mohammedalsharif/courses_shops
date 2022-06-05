@@ -13,20 +13,7 @@ class CoursesScreen extends StatefulWidget {
   _CoursesScreenState createState() => _CoursesScreenState();
 }
 
-class _CoursesScreenState extends State<CoursesScreen>
-    with SingleTickerProviderStateMixin {
-  TextStyle textStyle = TextStyle(
-    color: colorText,
-    fontSize: 16,
-    fontWeight: FontWeight.bold,
-    fontFamily: 'PlayfairDisplay',
-  );
-  TextStyle blackTextStyle = TextStyle(
-    color: Colors.black,
-    fontWeight: FontWeight.bold,
-    fontFamily: 'PlayfairDisplay',
-  );
-
+class _CoursesScreenState extends State<CoursesScreen> with SingleTickerProviderStateMixin {
   TabController? _controller;
   int index = 0;
   List<Courses> coursesList = [];

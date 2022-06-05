@@ -38,6 +38,7 @@ flutter:
     - assets/post.jpg
     - assets/shadow.png
     - assets/imgso.jpg
+    - assets/empty-cart.png
 
 
   fonts:

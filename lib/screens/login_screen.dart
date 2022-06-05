@@ -22,8 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   AuthFireBase _authFireBase = AuthFireBase();
   late String _email;
   late String _password;
-final storage=new FlutterSecureStorage();
-
+  final storage = new FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +136,8 @@ final storage=new FlutterSecureStorage();
                       setState(() {
                         isLoading = true;
                       });
-                      MyUser? user = await _authFireBase.loginWithEmailAndPassword(_email, _password);
+                      MyUser? user = await _authFireBase
+                          .loginWithEmailAndPassword(_email, _password);
                       if (user != null) {
                         await storage.write(key: "uid", value: user.uid);
                         Navigator.pushReplacement(

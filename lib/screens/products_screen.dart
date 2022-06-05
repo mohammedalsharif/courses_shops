@@ -14,18 +14,6 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  TextStyle textStyle = TextStyle(
-    color: colorText,
-    fontSize: 16,
-    fontWeight: FontWeight.bold,
-    fontFamily: 'PlayfairDisplay',
-  );
-  TextStyle blackTextStyle = TextStyle(
-    color: Colors.black,
-    fontWeight: FontWeight.bold,
-    fontFamily: 'PlayfairDisplay',
-  );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
